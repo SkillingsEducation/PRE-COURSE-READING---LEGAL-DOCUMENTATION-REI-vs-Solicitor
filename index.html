@@ -160,6 +160,62 @@
 
     
     <script>__loadEntry()</script>
-    
+    <audio id="bg-music" loop>
+    <source src="motivationalday.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Volume Control UI (Always Visible at Bottom-Right) -->
+<div id="audio-controls" style="position: fixed; bottom: 20px; right: 20px; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.2); text-align: center; z-index: 9999;">
+    <label for="volume-control">Volume:</label>
+    <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5">
+    <br>
+    <!-- Mute/Unmute Icon Button -->
+    <img id="mute-button" src="musicon.png" 
+         alt="Mute/Unmute" style="width: 30px; height: 30px; margin-top: 5px; cursor: pointer;">
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var audio = document.getElementById("bg-music");
+    var volumeControl = document.getElementById("volume-control");
+    var muteButton = document.getElementById("mute-button");
+
+    // Local file references (ensure musicon.png & musicoff.png are in the same folder as index.html)
+    var muteIcon = "musicoff.png";  // Image when sound is OFF
+    var unmuteIcon = "musicon.png"; // Image when sound is ON
+
+    // Set default volume
+    audio.volume = 0.5;
+
+    // Change volume when slider moves
+    volumeControl.addEventListener("input", function() {
+        audio.volume = this.value;
+    });
+
+    // Ensure autoplay works with user interaction
+    audio.play().catch(error => console.log("Autoplay blocked:", error));
+    document.body.addEventListener("click", function() {
+        audio.play();
+    }, { once: true });
+
+    // Mute/Unmute functionality with icon swap
+    muteButton.addEventListener("click", function() {
+        if (audio.muted) {
+            audio.muted = false;
+            muteButton.src = unmuteIcon; // Show unmute icon (music is playing)
+        } else {
+            audio.muted = true;
+            muteButton.src = muteIcon; // Show mute icon (music is off)
+        }
+    });
+
+    // Ensure correct icon on page load
+    if (audio.muted) {
+        muteButton.src = muteIcon;
+    } else {
+        muteButton.src = unmuteIcon;
+    }
+  });
+</script>
   </body>
 </html>
