@@ -164,14 +164,20 @@
     <source src="motivationalday.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Volume Control UI (Always Visible at Bottom-Right) -->
+<!-- Volume Control UI (Collapsible) -->
 <div id="audio-controls" style="position: fixed; bottom: 20px; right: 20px; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.2); text-align: center; z-index: 9999;">
-    <label for="volume-control">Volume:</label>
-    <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5">
-    <br>
+    <div id="controls-content">
+        <label for="volume-control">Volume:</label>
+        <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5">
+        <br>
+    </div>
     <!-- Mute/Unmute Icon Button -->
     <img id="mute-button" src="musicon.png" 
          alt="Mute/Unmute" style="width: 30px; height: 30px; margin-top: 5px; cursor: pointer;">
+
+    <!-- Toggle Button for Show/Hide -->
+    <button id="toggle-button" 
+            style="position: absolute; bottom: -15px; right: -10px; background: none; border: none; font-size: 24px; cursor: pointer;">🔽</button>
 </div>
 
 <script>
@@ -179,8 +185,10 @@
     var audio = document.getElementById("bg-music");
     var volumeControl = document.getElementById("volume-control");
     var muteButton = document.getElementById("mute-button");
+    var toggleButton = document.getElementById("toggle-button");
+    var controlsContent = document.getElementById("controls-content");
 
-    // Local file references (ensure musicon.png & musicoff.png are in the same folder as index.html)
+    // Local file references (ensure musicon.png & musicoff.png are in the same folder)
     var muteIcon = "musicoff.png";  // Image when sound is OFF
     var unmuteIcon = "musicon.png"; // Image when sound is ON
 
@@ -202,10 +210,10 @@
     muteButton.addEventListener("click", function() {
         if (audio.muted) {
             audio.muted = false;
-            muteButton.src = unmuteIcon; // Show unmute icon (music is playing)
+            muteButton.src = unmuteIcon; // Show unmute icon
         } else {
             audio.muted = true;
-            muteButton.src = muteIcon; // Show mute icon (music is off)
+            muteButton.src = muteIcon; // Show mute icon
         }
     });
 
@@ -215,7 +223,19 @@
     } else {
         muteButton.src = unmuteIcon;
     }
+
+    // Toggle volume control visibility
+    toggleButton.addEventListener("click", function() {
+        if (controlsContent.style.display === "none") {
+            controlsContent.style.display = "block";
+            toggleButton.textContent = "🔽"; // Show collapse icon
+        } else {
+            controlsContent.style.display = "none";
+            toggleButton.textContent = "🔼"; // Show expand icon
+        }
+    });
   });
 </script>
+
   </body>
 </html>
